@@ -43,7 +43,9 @@ if MERGE_COMMON_LABELS:
     for item in matrix_dict['include']:
         merged_changes.update(item)
 
-    matrix_dict['include'] = merged_changes
+    # reset dict and populate with merged changes
+    matrix_dict['include'] = []
+    matrix_dict['include'].append(merged_changes)
 
 print(json.dumps(matrix_dict))
 
