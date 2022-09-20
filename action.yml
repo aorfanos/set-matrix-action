@@ -4,5 +4,10 @@ author: aorfanos
 runs:
   using: "composite"
   steps:
-    - run: python ${{ github.action_path }}/set-matrix.py
+    - id: set-matrix
+      run: python ${{ github.action_path }}/set-matrix.py
       shell: bash
+outputs:
+  matrix:
+    description: "Changes matrix"
+    value: ${{ steps.set-matrix.outputs.matrix }}
