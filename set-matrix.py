@@ -19,9 +19,9 @@ walkback_dict = {}
 def walk_reverse(item):
     for iter, change in enumerate(item):
         path = change.split('/')
-        matrix_dict["include"].append({f"{change}": []})
+        matrix_dict["include"].append({f"{change}": "null"})
         for i in range(len(path)):
-            matrix_dict['include'][int(iter)][f"{change}"][f"walkback_{i}"] = f"{'/'.join(path[:i+1])}"
+            matrix_dict['include'][int(iter)][f"walkback_{i}"] = f"{'/'.join(path[:i+1])}"
 
 
 with os.popen(git_fetch_changes_cmd) as f:
