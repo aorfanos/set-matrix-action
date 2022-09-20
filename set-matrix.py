@@ -45,6 +45,6 @@ if MERGE_COMMON_LABELS:
 
     matrix_dict['include'] = merged_changes
 
-# print(json.dumps(matrix_dict))
+print(json.dumps(matrix_dict))
 
 print(f"::set-output name=matrix::{json.dumps(matrix_dict)}")
