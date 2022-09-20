@@ -8,7 +8,7 @@ WATCH_CHANGES_FILES = re.compile(
     rf'{os.getenv("WATCH_CHANGES_FILES",default=".*yaml$|.*hcl$")}'
 )
 WATCH_DIRS = re.compile(
-    rf'{os.getenv("WATCH_DIRS")}'
+    rf'{os.getenv("WATCH_DIRS"),default=".*"}'
 )
 
 git_files_diff = []
