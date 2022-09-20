@@ -7,6 +7,9 @@ HEAD_BRANCH = os.getenv('HEAD_BRANCH', default="main")
 WATCH_CHANGES_FILES = re.compile(
     rf'{os.getenv("WATCH_CHANGES_FILES",default=".*yaml$|.*hcl$")}'
 )
+WATCH_DIRS = re.compile(
+    rf'{os.getenv("WATCH_DIRS")}'
+)
 
 git_files_diff = []
 git_fetch_changes_cmd = f"git diff --name-only HEAD origin/{HEAD_BRANCH}"
@@ -21,12 +24,13 @@ def walk_reverse(item):
         path = change.split('/')
         matrix_dict["include"].append({f"{change}": "null"})
         for i in range(len(path)):
-            matrix_dict['include'][int(iter)][f"walkback_{i}"] = f"{'/'.join(path[:i+1])}"
+            matrix_dict['include'][int(
+                iter)][f"walkback_{i}"] = f"{'/'.join(path[:i+1])}"
 
 
 with os.popen(git_fetch_changes_cmd) as f:
     for file in f.readlines():
-        if WATCH_CHANGES_FILES.findall(file):
+        if WATCH_CHANGES_FILES.findall(file) and WATCH_DIRS.findall(file):
             git_files_diff.append(re.sub('\n', '', file))
 
 walk_reverse(git_files_diff)
