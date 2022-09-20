@@ -1,3 +1,4 @@
+from nis import match
 from ntpath import join
 import os
 import re
@@ -10,6 +11,7 @@ WATCH_CHANGES_FILES = re.compile(
 WATCH_DIRS = re.compile(
     rf'{os.getenv("WATCH_DIRS",default=".*")}'
 )
+MERGE_COMMON_LABELS = os.getenv('MERGE_COMMON_LABELS', default=0)
 
 git_files_diff = []
 git_fetch_changes_cmd = f"git diff --name-only HEAD origin/{HEAD_BRANCH}"
@@ -34,6 +36,15 @@ with os.popen(git_fetch_changes_cmd) as f:
             git_files_diff.append(re.sub('\n', '', file))
 
 walk_reverse(git_files_diff)
-print(json.dumps(matrix_dict))
+
+if MERGE_COMMON_LABELS:
+    # create a single dict with all unique fields
+    merged_changes = {}
+    for item in matrix_dict['include']:
+        merged_changes.update(item)
+
+    matrix_dict['include'] = merged_changes
+
+# print(json.dumps(matrix_dict))
 
 print(f"::set-output name=matrix::{json.dumps(matrix_dict)}")
