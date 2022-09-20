@@ -6,10 +6,3 @@ runs:
   steps:
     - run: python ${{ github.action_path }}/set-matrix.py
       shell: bash
-inputs:
-  head_branch:
-    description: The HEAD to compare changes to
-    required: true
-  watch_changes_files:
-    description: Regex of files to watch for changes
-    required: true

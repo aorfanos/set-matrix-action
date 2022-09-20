@@ -3,9 +3,9 @@ import os
 import re
 import json
 
-HEAD_BRANCH = os.getenv('INPUT_HEAD_BRANCH', default="main")
+HEAD_BRANCH = os.getenv('HEAD_BRANCH', default="main")
 WATCH_CHANGES_FILES = re.compile(
-    rf'{os.getenv("INPUT_WATCH_CHANGES_FILES",default=".*yaml$|.*hcl$")}'
+    rf'{os.getenv("WATCH_CHANGES_FILES",default=".*yaml$|.*hcl$")}'
 )
 
 git_files_diff = []
