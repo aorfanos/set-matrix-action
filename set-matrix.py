@@ -12,6 +12,7 @@ WATCH_DIRS = re.compile(
     rf'{os.getenv("WATCH_DIRS",default=".*")}'
 )
 MERGE_COMMON_LABELS = os.getenv('MERGE_COMMON_LABELS', default=0)
+merge_depth = f"walkback_{MERGE_COMMON_LABELS}"
 
 git_files_diff = []
 git_fetch_changes_cmd = f"git diff --name-only HEAD origin/{HEAD_BRANCH}"
@@ -24,7 +25,8 @@ walkback_dict = {}
 def walk_reverse(item):
     for iter, change in enumerate(item):
         path = change.split('/')
-        matrix_dict["include"].append({f"{change}": "null"})
+        # add a null variable to attach walkbacks in
+        matrix_dict['include'].append({f'{change}': 'null'})
         for i in range(len(path)):
             matrix_dict['include'][int(
                 iter)][f"walkback_{i}"] = f"{'/'.join(path[:i+1])}"
@@ -38,15 +40,17 @@ with os.popen(git_fetch_changes_cmd) as f:
 walk_reverse(git_files_diff)
 
 if MERGE_COMMON_LABELS:
-    # create a single dict with all unique fields
-    merged_changes = {}
-    for item in matrix_dict['include']:
-        merged_changes.update(item)
+    merged_changes = []
+
+    seen = set()
+    for subitem in matrix_dict['include']:
+        if subitem[merge_depth] not in seen:
+            merged_changes.append(subitem)
+            seen.add(subitem[merge_depth])
 
     # reset dict and populate with merged changes
     matrix_dict['include'] = []
     matrix_dict['include'].append(merged_changes)
 
 print(json.dumps(matrix_dict))
-
 print(f"::set-output name=matrix::{json.dumps(matrix_dict)}")
