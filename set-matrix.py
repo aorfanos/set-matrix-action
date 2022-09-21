@@ -40,17 +40,17 @@ with os.popen(git_fetch_changes_cmd) as f:
 walk_reverse(git_files_diff)
 
 if MERGE_COMMON_LABELS:
-    merged_changes = []
+    merged_changes = {"include": []}
 
     seen = set()
     for subitem in matrix_dict['include']:
         if subitem[merge_depth] not in seen:
-            merged_changes.append(subitem)
+            merged_changes['include'].append(subitem)
             seen.add(subitem[merge_depth])
 
     # reset dict and populate with merged changes
     matrix_dict['include'] = []
-    matrix_dict['include'].append(merged_changes)
+    matrix_dict = merged_changes
 
 print(json.dumps(matrix_dict))
 print(f"::set-output name=matrix::{json.dumps(matrix_dict)}")
