@@ -5,7 +5,8 @@ import re
 import json
 
 HEAD_BRANCH = os.getenv('HEAD_BRANCH', default="main")
-DIFF_FILTER = os.getenv('DIFF_FILTER', default="*")
+DIFF_FILTER = os.getenv('DIFF_FILTER', default="ACDMRTUXB")
+
 WATCH_CHANGES_FILES = re.compile(
     rf'{os.getenv("WATCH_CHANGES_FILES",default=".*yaml$|.*hcl$")}'
 )
