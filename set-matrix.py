@@ -15,7 +15,7 @@ MERGE_COMMON_LABELS = os.getenv('MERGE_COMMON_LABELS', default=0)
 merge_depth = f"walkback_{MERGE_COMMON_LABELS}"
 
 git_files_diff = []
-git_fetch_changes_cmd = f"git diff --diff-filter=D --name-only HEAD origin/{HEAD_BRANCH}"
+git_fetch_changes_cmd = f"git diff --name-only HEAD origin/{HEAD_BRANCH}"
 
 matrix_dict = {"include": []}
 
