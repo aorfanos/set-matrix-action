@@ -5,6 +5,7 @@ import re
 import json
 
 HEAD_BRANCH = os.getenv('HEAD_BRANCH', default="main")
+DIFF_FILTER = os.getenv('DIFF_FILTER', default="*")
 WATCH_CHANGES_FILES = re.compile(
     rf'{os.getenv("WATCH_CHANGES_FILES",default=".*yaml$|.*hcl$")}'
 )
@@ -15,7 +16,7 @@ MERGE_COMMON_LABELS = os.getenv('MERGE_COMMON_LABELS', default=0)
 merge_depth = f"walkback_{MERGE_COMMON_LABELS}"
 
 git_files_diff = []
-git_fetch_changes_cmd = f"git diff --name-only HEAD origin/{HEAD_BRANCH}"
+git_fetch_changes_cmd = f"git diff --diff-filter={DIFF_FILTER} --name-only HEAD origin/{HEAD_BRANCH}"
 
 matrix_dict = {"include": []}
 
